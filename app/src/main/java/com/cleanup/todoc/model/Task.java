@@ -9,15 +9,19 @@ import android.support.annotation.Nullable;
 
 import java.util.Comparator;
 
+import static android.arch.persistence.room.ForeignKey.CASCADE;
+
 /**
  * <p>Model for the tasks of the application.</p>
  *
  * @author Gaëtan HERFRAY
  */
 
-@Entity(foreignKeys = @ForeignKey(entity = Project.class,
-        parentColumns = "id",
-        childColumns = "projectId"))
+@Entity(tableName = "tasks",
+        foreignKeys = @ForeignKey(entity = Project.class,
+                parentColumns = "id",
+                childColumns = "project_id",
+                onDelete = CASCADE))
 public class Task {
     /**
      * The unique identifier of the task
@@ -51,8 +55,7 @@ public class Task {
      * @param name              the name of the task to set
      * @param creationTimestamp the timestamp when the task has been created to set
      */
-    public Task(long id, long projectId, @NonNull String name, long creationTimestamp) {
-        this.setId(id);
+    public Task(long projectId, @NonNull String name, long creationTimestamp) {
         this.setProjectId(projectId);
         this.setName(name);
         this.setCreationTimestamp(creationTimestamp);
@@ -70,9 +73,9 @@ public class Task {
     /**
      * Sets the unique identifier of the task.
      *
-     * @param id the unique identifier of the task to set
+     * @param id the unique idenifier of the task to set
      */
-    private void setId(long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -123,9 +126,13 @@ public class Task {
         this.creationTimestamp = creationTimestamp;
     }
 
-    public long getProjectId() { return projectId; }
+    public long getProjectId() {
+        return projectId;
+    }
 
-    public long getCreationTimestamp() { return creationTimestamp; }
+    public long getCreationTimestamp() {
+        return creationTimestamp;
+    }
 
     /**
      * Comparator to sort task from A to Z

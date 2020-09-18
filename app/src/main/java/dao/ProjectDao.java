@@ -12,16 +12,9 @@ import java.util.List;
 
 @Dao
 public interface ProjectDao {
+    @Query("SELECT * FROM projects")
+    LiveData<List<Project>> getProjects();
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertProject(Project project);
-
-    @Query("SELECT * FROM Project;")
-    LiveData<List<Project>> getAllProjects();
-
-    @Query("SELECT * FROM Project WHERE id= :id;")
-    LiveData<Project> getProject(long id);
-
-    @Query("SELECT * FROM Project WHERE id= :id;")
-    Project getProjectById(long id);
+    @Insert
+    void insertProjects(Project... projects);
 }

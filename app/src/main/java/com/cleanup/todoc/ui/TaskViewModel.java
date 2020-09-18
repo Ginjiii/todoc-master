@@ -16,35 +16,35 @@ import repositories.TaskDataRepository;
 public class TaskViewModel extends ViewModel {
 
     // REPOSITORIES
-    private final ProjectDataRepository projectDataSource;
-    private final TaskDataRepository taskDataSource;
-    private final Executor executor;
+    private final ProjectDataRepository mProjectDataSource;
+    private final TaskDataRepository mTaskDataSource;
+    private final Executor mExecutor;
 
     // DATA
     @Nullable
-    private LiveData<List<Project>> currentProject;
+    private LiveData<List<Project>> mProjects;
 
     public TaskViewModel(ProjectDataRepository projectDataSource, TaskDataRepository taskDataSource, Executor executor) {
-        this.projectDataSource = projectDataSource;
-        this.taskDataSource = taskDataSource;
-        this.executor = executor;
+        mProjectDataSource = projectDataSource;
+        mTaskDataSource = taskDataSource;
+        mExecutor = executor;
     }
 
-    public void init(long projectId) {
-        if (currentProject == null)
-            currentProject = projectDataSource.getProjects();
+    public void init() {
+        if (mProjects == null)
+            mProjects = mProjectDataSource.getProjects();
     }
 
     // FOR PROJECT
 
     @Nullable
-    public LiveData<List<Project>> getProjects() { return currentProject; }
+    public LiveData<List<Project>> getProjects() { return mProjects; }
 
     // FOR TASK
 
-    public LiveData<List<Task>> getTasks(long projectId) { return taskDataSource.getTasks(projectId); }
+    public LiveData<List<Task>> getTasks() { return mTaskDataSource.getTasks(); }
 
-    public void createTask(Task task) { executor.execute(() -> taskDataSource.createTask(task)); }
+    public void createTask(Task task) { mExecutor.execute(() -> mTaskDataSource.createTask(task)); }
 
-    public void deleteTask(Task task) { executor.execute(() -> taskDataSource.deleteTask(task)); }
+    public void deleteTask(Task task) { mExecutor.execute(() -> mTaskDataSource.deleteTask(task)); }
 }
